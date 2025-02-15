@@ -103,14 +103,14 @@ Create table artists (
 
 time_table_create = (""" 
 Create table time_table (
-                     start_time timestamp PRIMARY KEY,
-                     hour int , 
-                     day int , 
-                     week int , 
-                     month int , 
-                     year int , 
-                     weekday boolean 
-)
+                         start_time timestamp PRIMARY KEY,
+                         hour int , 
+                         day int , 
+                         week int , 
+                         month int , 
+                         year int , 
+                         weekday int
+    )
 """)
 
 # STAGING TABLES
@@ -189,17 +189,15 @@ Insert into artists (artist_id, name, location, latitude, longitude)
 """)
 
 
-time_table_insert = ("""
-Insert into time_table (start_time, hour, day, week, month, year, weekday)
-                     SELECT DISTINCT ed.ts::TIMESTAMP AS start_time,
-                     EXTRACT(hour FROM ed.ts::TIMESTAMP) AS hour,
-                     EXTRACT(day FROM ed.ts::TIMESTAMP) AS day,
-                     EXTRACT(week FROM ed.ts::TIMESTAMP) AS week,
-                     EXTRACT(month FROM ed.ts::TIMESTAMP) AS month,
-                     EXTRACT(year FROM ed.ts::TIMESTAMP) AS year,
-                     CASE WHEN EXTRACT(ISODOW FROM ed.ts) IN (6, 7) THEN false ELSE true END AS weekday
-                     FROM events_data ed
-                     WHERE start_time IS NOT NULL
+time_table_insert = ("""INSERT INTO time_table (start_time, hour, day, week, month, year, weekday) 
+                        SELECT DISTINCT start_time, 
+                        extract(hour from start_time), 
+                        extract(day from start_time), 
+                        extract(week from start_time), 
+                        extract(month from start_time),                             
+                        extract(year from start_time), 
+                        extract(dayofweek from start_time) 
+                        FROM songplays 
 """)
 
 # QUERY LISTS

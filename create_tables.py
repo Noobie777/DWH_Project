@@ -4,6 +4,8 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
+    '''Drop all the tables if they are already present in the cluster.
+    '''
     for query in drop_table_queries:
         print("Dropping")
         cur.execute(query)
@@ -11,6 +13,8 @@ def drop_tables(cur, conn):
 
 
 def create_tables(cur, conn):
+    '''Create all the tables in the cluster.
+    '''
     for query in create_table_queries:
         print("Creating")
         cur.execute(query)
